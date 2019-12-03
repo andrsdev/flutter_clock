@@ -148,6 +148,7 @@ class _AnalogClockState extends State<AnalogClock> {
               size: 0.9,
               angleRadians: _now.minute * radiansPerTick,
             ),
+            
             // Example of a hand drawn with [Container].
             ContainerHand(
               color: Colors.transparent,
