@@ -151,54 +151,80 @@ class _AnalogClockState extends State<AnalogClock> {
 
             Flexible(
               flex: 2,
-              child: Stack(
-                children: [
-                  // Example of a hand drawn with [CustomPainter].
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) => Stack(
+                  children: [
 
-                  Center(child: Image.asset(_clockFaceName)),
+                    //Clock face
+                    Center(child: Image.asset(_clockFaceName)),
 
-                  DrawnHand(
-                    color: customTheme.accentColor,
-                    thickness: 3,
-                    size: 0.75,
-                    angleRadians: _now.second * radiansPerTick,
-                  ),
-                  
-                  DrawnHand(
-                    color: customTheme.highlightColor,
-                    thickness: 8,
-                    size: 0.5,
-                    angleRadians: _now.minute * radiansPerTick,
-                  ),
-
-                  //Hours hand
-                  ContainerHand(
-                    color: Colors.transparent,
-                    size: 0.5,
-                    angleRadians: _now.hour * radiansPerHour +
-                        (_now.minute / 60) * radiansPerHour,
-                    child: Transform.translate(
-                      offset: Offset(0.0, -60.0),
-                      child: Container(
-                        width: 32,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: customTheme.primaryColor,
-                          borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.12),
-                              blurRadius: 38.0,
-                            )
-                          ]
+                    //Seconds hand
+                    ContainerHand(
+                      color: Colors.transparent,
+                      size: 0.5,
+                      angleRadians: _now.second * radiansPerTick,
+                      child: Transform.translate(
+                        offset: Offset(0.0, - constraints.maxHeight * 0.38),
+                        child: Container(
+                          width: constraints.maxHeight * 0.01,
+                          height: constraints.maxHeight * 0.76,
+                          decoration: BoxDecoration(
+                            color: customTheme.accentColor,
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
                         ),
                       ),
+                   
                     ),
-                  ),
+
+
+                    //Minutes hand
+                    ContainerHand(
+                      color: Colors.transparent,
+                      size: 0.5,
+                      angleRadians: _now.minute * radiansPerTick,
+                      child: Transform.translate(
+                        offset: Offset(0.0, - constraints.maxHeight * 0.25),
+                        child: Container(
+                          width: constraints.maxHeight * 0.04,
+                          height: constraints.maxHeight * 0.5,
+                          decoration: BoxDecoration(
+                            color: customTheme.highlightColor,
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                        ),
+                      ),  
+                    ),
+
+
+                    //Hours hand
+                    ContainerHand(
+                      color: Colors.transparent,
+                      size: 0.5,
+                      angleRadians: radiansPerHour  * (_now.hour + (_now.minute / 60)),
+                      child: Transform.translate(
+                        offset: Offset(0.0, - constraints.maxHeight * 0.12),
+                        child: Container(
+                          width: constraints.maxHeight * 0.08,
+                          height: constraints.maxHeight * 0.3,
+                          decoration: BoxDecoration(
+                            color: customTheme.primaryColor,
+                            borderRadius: BorderRadius.circular(8.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.12),
+                                blurRadius: 38.0,
+                              )
+                            ]
+                          ),
+                        ),
+                      ),     
+                    ),
 
 
 
-                ],
+                  ],
+                ),
               ),
             ),
           ],
