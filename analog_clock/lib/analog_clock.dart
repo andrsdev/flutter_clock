@@ -33,6 +33,9 @@ class AnalogClock extends StatefulWidget {
 }
 
 class _AnalogClockState extends State<AnalogClock> {
+
+  String _clockFaceName = 'assets/img/light_clock_face.png';
+
   var _now = DateTime.now();
   var _temperature = '';
   var _temperatureRange = '';
@@ -88,31 +91,33 @@ class _AnalogClockState extends State<AnalogClock> {
 
   @override
   Widget build(BuildContext context) {
-    // There are many ways to apply themes to your clock. Some are:
-    //  - Inherit the parent Theme (see ClockCustomizer in the
-    //    flutter_clock_helper package).
-    //  - Override the Theme.of(context).colorScheme.
-    //  - Create your own [ThemeData], demonstrated in [AnalogClock].
-    //  - Create a map of [Color]s to custom keys, demonstrated in
-    //    [DigitalClock].
+
+
+    if(Theme.of(context).brightness == Brightness.light){
+      _clockFaceName = 'assets/img/light_clock_face.png';
+    } else {
+      _clockFaceName = 'assets/img/dark_clock_face.png';
+    }
+
     final customTheme = Theme.of(context).brightness == Brightness.light
         ? Theme.of(context).copyWith(
             // Hour hand.
-            primaryColor: Color(0xFF4285F4),
+            primaryColor: Color(0xFFFFFFFF),
             // Minute hand.
-            highlightColor: Color(0xFF8AB4F8),
+            highlightColor: Color(0xFFFBFBFB),
             // Second hand.
-            accentColor: Color(0xFF669DF6),
-            backgroundColor: Color(0xFFD2E3FC),
+            accentColor: Color(0xFFFF060A),
+            backgroundColor: Color(0xFFFFFFFF),
           )
         : Theme.of(context).copyWith(
-            primaryColor: Color(0xFFD2E3FC),
-            highlightColor: Color(0xFF4285F4),
-            accentColor: Color(0xFF8AB4F8),
-            backgroundColor: Color(0xFF3C4043),
+            primaryColor: Color(0xFFFFFFFF),
+            highlightColor: Color(0xFFC0C0C0),
+            accentColor: Color(0xFFFF0202),
+            backgroundColor: Color(0xFF000000),
           );
 
     final time = DateFormat.Hms().format(DateTime.now());
+
     final weatherInfo = DefaultTextStyle(
       style: TextStyle(color: customTheme.primaryColor),
       child: Column(
@@ -133,45 +138,93 @@ class _AnalogClockState extends State<AnalogClock> {
       ),
       child: Container(
         color: customTheme.backgroundColor,
-        child: Stack(
-          children: [
-            // Example of a hand drawn with [CustomPainter].
-            DrawnHand(
-              color: customTheme.accentColor,
-              thickness: 4,
-              size: 1,
-              angleRadians: _now.second * radiansPerTick,
+
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+
+            Flexible(
+              flex: 1,
+              child: Text('mountain view')
             ),
-            DrawnHand(
-              color: customTheme.highlightColor,
-              thickness: 16,
-              size: 0.9,
-              angleRadians: _now.minute * radiansPerTick,
-            ),
-            
-            // Example of a hand drawn with [Container].
-            ContainerHand(
-              color: Colors.transparent,
-              size: 0.5,
-              angleRadians: _now.hour * radiansPerHour +
-                  (_now.minute / 60) * radiansPerHour,
-              child: Transform.translate(
-                offset: Offset(0.0, -60.0),
-                child: Container(
-                  width: 32,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: customTheme.primaryColor,
-                  ),
+
+            Flexible(
+              flex: 2,
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) => Stack(
+                  children: [
+
+                    //Clock face
+                    Center(child: Image.asset(_clockFaceName)),
+
+                    //Seconds hand
+                    ContainerHand(
+                      color: Colors.transparent,
+                      size: 0.5,
+                      angleRadians: _now.second * radiansPerTick,
+                      child: Transform.translate(
+                        offset: Offset(0.0, - constraints.maxHeight * 0.38),
+                        child: Container(
+                          width: constraints.maxHeight * 0.008,
+                          height: constraints.maxHeight * 0.76,
+                          decoration: BoxDecoration(
+                            color: customTheme.accentColor,
+                            borderRadius: BorderRadius.circular(constraints.maxHeight),
+                          ),
+                        ),
+                      ),
+                   
+                    ),
+
+
+                    //Minutes hand
+                    ContainerHand(
+                      color: Colors.transparent,
+                      size: 0.5,
+                      angleRadians: _now.minute * radiansPerTick,
+                      child: Transform.translate(
+                        offset: Offset(0.0, - constraints.maxHeight * 0.25),
+                        child: Container(
+                          width: constraints.maxHeight * 0.03,
+                          height: constraints.maxHeight * 0.5,
+                          decoration: BoxDecoration(
+                            color: customTheme.highlightColor,
+                            borderRadius: BorderRadius.circular(constraints.maxHeight * 0.01),
+                          ),
+                        ),
+                      ),  
+                    ),
+
+
+                    //Hours hand
+                    ContainerHand(
+                      color: Colors.transparent,
+                      size: 0.5,
+                      angleRadians: radiansPerHour  * (_now.hour + (_now.minute / 60)),
+                      child: Transform.translate(
+                        offset: Offset(0.0, - constraints.maxHeight * 0.12),
+                        child: Container(
+                          width: constraints.maxHeight * 0.08,
+                          height: constraints.maxHeight * 0.3,
+                          decoration: BoxDecoration(
+                            color: customTheme.primaryColor,
+                            borderRadius: BorderRadius.circular(constraints.maxHeight * 0.02),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.12),
+                                blurRadius: 38.0,
+                              )
+                            ]
+                          ),
+                        ),
+                      ),     
+                    ),
+
+
+
+                  ],
                 ),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              bottom: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: weatherInfo,
               ),
             ),
           ],
