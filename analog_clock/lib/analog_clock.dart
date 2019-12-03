@@ -166,11 +166,11 @@ class _AnalogClockState extends State<AnalogClock> {
                       child: Transform.translate(
                         offset: Offset(0.0, - constraints.maxHeight * 0.38),
                         child: Container(
-                          width: constraints.maxHeight * 0.01,
+                          width: constraints.maxHeight * 0.008,
                           height: constraints.maxHeight * 0.76,
                           decoration: BoxDecoration(
                             color: customTheme.accentColor,
-                            borderRadius: BorderRadius.circular(4.0),
+                            borderRadius: BorderRadius.circular(constraints.maxHeight),
                           ),
                         ),
                       ),
@@ -186,11 +186,11 @@ class _AnalogClockState extends State<AnalogClock> {
                       child: Transform.translate(
                         offset: Offset(0.0, - constraints.maxHeight * 0.25),
                         child: Container(
-                          width: constraints.maxHeight * 0.036,
+                          width: constraints.maxHeight * 0.03,
                           height: constraints.maxHeight * 0.5,
                           decoration: BoxDecoration(
                             color: customTheme.highlightColor,
-                            borderRadius: BorderRadius.circular(constraints.maxHeight * 0.012),
+                            borderRadius: BorderRadius.circular(constraints.maxHeight * 0.01),
                           ),
                         ),
                       ),  
