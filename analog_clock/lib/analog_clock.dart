@@ -30,7 +30,6 @@ class AnalogClock extends StatefulWidget {
 }
 
 class _AnalogClockState extends State<AnalogClock> {
-
   String _clockFaceName = 'assets/img/light_clock_face.png';
 
   var _now = DateTime.now();
@@ -84,31 +83,29 @@ class _AnalogClockState extends State<AnalogClock> {
 
   @override
   Widget build(BuildContext context) {
-
     final time = DateFormat.Hms().format(DateTime.now());
     ThemeData customTheme = ThemeData();
     BoxShadow hourHandBoxShadow = BoxShadow();
 
-    if(Theme.of(context).brightness == Brightness.light){
+    if (Theme.of(context).brightness == Brightness.light) {
       _clockFaceName = 'assets/img/light_clock_face.png';
       customTheme = Theme.of(context).copyWith(
-        primaryColor: Color(0xFFFFFFFF), //hour hand
-        highlightColor: Color(0xFFFBFBFB), //minute hand
-        accentColor: Color(0xFFFF060A), //seconds hnd
-        backgroundColor: Color(0xFFFFFFFF),
-        textTheme: TextTheme(
-          display1: TextStyle(
-            fontFamily: 'Alata',
-            fontWeight: FontWeight.w400,
-            color: Color(0xFF505050),
-          ),
-          body1: TextStyle(
-            fontFamily: 'Alata',
-            fontWeight: FontWeight.w400,
-            color: Color(0xFF808080),
-          ),
-        )
-      );
+          primaryColor: Color(0xFFFFFFFF), //hour hand
+          highlightColor: Color(0xFFFBFBFB), //minute hand
+          accentColor: Color(0xFFFF060A), //seconds hnd
+          backgroundColor: Color(0xFFFFFFFF),
+          textTheme: TextTheme(
+            display1: TextStyle(
+              fontFamily: 'Alata',
+              fontWeight: FontWeight.w400,
+              color: Color(0xFF505050),
+            ),
+            body1: TextStyle(
+              fontFamily: 'Alata',
+              fontWeight: FontWeight.w400,
+              color: Color(0xFF808080),
+            ),
+          ));
       hourHandBoxShadow = BoxShadow(
         color: Colors.black.withOpacity(0.12),
         blurRadius: 38.0,
@@ -116,28 +113,27 @@ class _AnalogClockState extends State<AnalogClock> {
     } else {
       _clockFaceName = 'assets/img/dark_clock_face.png';
       customTheme = Theme.of(context).copyWith(
-        primaryColor: Color(0xFFFFFFFF),
-        highlightColor: Color(0xFFC0C0C0),
-        accentColor: Color(0xFFFF0202),
-        backgroundColor: Color(0xFF000000),
-        textTheme: TextTheme(
-          display1: TextStyle(
-            fontFamily: 'Alata',
-            fontWeight: FontWeight.w400,
-            color: Color(0xFFE0E0E0),
-          ),
-          body1: TextStyle(
-            fontFamily: 'Alata',
-            fontWeight: FontWeight.w400,
-            color: Color(0xFF969696),
-          ),
-        )
-      );
+          primaryColor: Color(0xFFFFFFFF),
+          highlightColor: Color(0xFFC0C0C0),
+          accentColor: Color(0xFFFF0202),
+          backgroundColor: Color(0xFF000000),
+          textTheme: TextTheme(
+            display1: TextStyle(
+              fontFamily: 'Alata',
+              fontWeight: FontWeight.w400,
+              color: Color(0xFFE0E0E0),
+            ),
+            body1: TextStyle(
+              fontFamily: 'Alata',
+              fontWeight: FontWeight.w400,
+              color: Color(0xFF969696),
+            ),
+          ));
       hourHandBoxShadow = BoxShadow(
         color: Colors.black.withOpacity(0.72),
         blurRadius: 30.0,
       );
-    } 
+    }
 
     return Semantics.fromProperties(
       properties: SemanticsProperties(
@@ -146,57 +142,47 @@ class _AnalogClockState extends State<AnalogClock> {
       ),
       child: Container(
         color: customTheme.backgroundColor,
-
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) => Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-
               Flexible(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 64),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          _location,
-                          style: customTheme.textTheme.display1.copyWith(
-                            fontSize: constraints.maxHeight * 0.04
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 64),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            _location,
+                            style: customTheme.textTheme.display1.copyWith(
+                                fontSize: constraints.maxHeight * 0.04),
                           ),
                         ),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          DateFormat('MMMM d, y').format(_now),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            DateFormat('MMMM d, y').format(_now),
+                            style: customTheme.textTheme.body1.copyWith(
+                                fontSize: constraints.maxHeight * 0.024),
+                          ),
+                        ),
+                        Text(
+                          _temperature,
                           style: customTheme.textTheme.body1.copyWith(
-                            fontSize: constraints.maxHeight * 0.024
-                          ),
+                              fontSize: constraints.maxHeight * 0.024),
                         ),
-                      ),
-
-                      Text(
-                        _temperature,
-                        style: customTheme.textTheme.body1.copyWith(
-                          fontSize: constraints.maxHeight * 0.024
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ),
-
+                      ],
+                    ),
+                  )),
               Flexible(
                 flex: 2,
                 child: Stack(
                   children: [
-
                     //Clock face
                     Center(child: Image.asset(_clockFaceName)),
 
@@ -206,19 +192,18 @@ class _AnalogClockState extends State<AnalogClock> {
                       size: 0.5,
                       angleRadians: _now.second * radiansPerTick,
                       child: Transform.translate(
-                        offset: Offset(0.0, - constraints.maxHeight * 0.38),
+                        offset: Offset(0.0, -constraints.maxHeight * 0.38),
                         child: Container(
                           width: constraints.maxHeight * 0.008,
                           height: constraints.maxHeight * 0.76,
                           decoration: BoxDecoration(
                             color: customTheme.accentColor,
-                            borderRadius: BorderRadius.circular(constraints.maxHeight),
+                            borderRadius:
+                                BorderRadius.circular(constraints.maxHeight),
                           ),
                         ),
                       ),
-                    
                     ),
-
 
                     //Minutes hand
                     ContainerHand(
@@ -226,36 +211,37 @@ class _AnalogClockState extends State<AnalogClock> {
                       size: 0.5,
                       angleRadians: _now.minute * radiansPerTick,
                       child: Transform.translate(
-                        offset: Offset(0.0, - constraints.maxHeight * 0.25),
+                        offset: Offset(0.0, -constraints.maxHeight * 0.25),
                         child: Container(
                           width: constraints.maxHeight * 0.03,
                           height: constraints.maxHeight * 0.5,
                           decoration: BoxDecoration(
                             color: customTheme.highlightColor,
-                            borderRadius: BorderRadius.circular(constraints.maxHeight * 0.01),
+                            borderRadius: BorderRadius.circular(
+                                constraints.maxHeight * 0.01),
                           ),
                         ),
-                      ),  
+                      ),
                     ),
-
 
                     //Hours hand
                     ContainerHand(
                       color: Colors.transparent,
                       size: 0.5,
-                      angleRadians: radiansPerHour  * (_now.hour + (_now.minute / 60)),
+                      angleRadians:
+                          radiansPerHour * (_now.hour + (_now.minute / 60)),
                       child: Transform.translate(
-                        offset: Offset(0.0, - constraints.maxHeight * 0.12),
+                        offset: Offset(0.0, -constraints.maxHeight * 0.12),
                         child: Container(
                           width: constraints.maxHeight * 0.068,
                           height: constraints.maxHeight * 0.28,
                           decoration: BoxDecoration(
-                            color: customTheme.primaryColor,
-                            borderRadius: BorderRadius.circular(constraints.maxHeight * 0.02),
-                            boxShadow: [hourHandBoxShadow]
-                          ),
+                              color: customTheme.primaryColor,
+                              borderRadius: BorderRadius.circular(
+                                  constraints.maxHeight * 0.02),
+                              boxShadow: [hourHandBoxShadow]),
                         ),
-                      ),     
+                      ),
                     ),
                   ],
                 ),
