@@ -8,6 +8,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  intl: ^0.16.0
   flutter_clock_helper:
     path: ../flutter_clock_helper
   cupertino_icons: ^0.1.2
@@ -19,18 +20,11 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
-
-  # fonts:
-  #   - family: ReemKufi
-  #     fonts:
-  #       - asset: assets/fonts/ReemKufi/ReemKufi-Regular.ttf
-  #         weight: 400
-  #   - family: Montserrat
-  #     fonts:
-  #       - asset: assets/fonts/Montserrat/Montserrat-Light.ttf
-  #         weight: 300
-  #       - asset: assets/fonts/Montserrat/Montserrat-Regular.ttf
-  #         weight: 400
+  fonts:
+    - family: Alata
+      fonts:
+        - asset: assets/fonts/Alata/Alata-Regular.ttf
+          weight: 400
 
   assets:
    - assets/img/light_clock_face.png
