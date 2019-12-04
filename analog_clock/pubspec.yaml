@@ -8,7 +8,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.16.0
   flutter_clock_helper:
     path: ../flutter_clock_helper
   cupertino_icons: ^0.1.2

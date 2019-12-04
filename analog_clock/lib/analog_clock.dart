@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -36,8 +35,6 @@ class _AnalogClockState extends State<AnalogClock> {
 
   var _now = DateTime.now();
   var _temperature = '';
-  var _temperatureRange = '';
-  var _condition = '';
   var _location = '';
   Timer _timer;
 
@@ -69,8 +66,6 @@ class _AnalogClockState extends State<AnalogClock> {
   void _updateModel() {
     setState(() {
       _temperature = widget.model.temperatureString;
-      _temperatureRange = '(${widget.model.low} - ${widget.model.highString})';
-      _condition = widget.model.weatherString;
       _location = widget.model.location;
     });
   }
@@ -90,6 +85,7 @@ class _AnalogClockState extends State<AnalogClock> {
   @override
   Widget build(BuildContext context) {
 
+    final time = DateFormat.Hms().format(DateTime.now());
     ThemeData customTheme = ThemeData();
     BoxShadow hourHandBoxShadow = BoxShadow();
 
@@ -143,21 +139,6 @@ class _AnalogClockState extends State<AnalogClock> {
       );
     } 
 
-    final time = DateFormat.Hms().format(DateTime.now());
-
-    final weatherInfo = DefaultTextStyle(
-      style: TextStyle(color: customTheme.primaryColor),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(_temperature),
-          Text(_temperatureRange),
-          Text(_condition),
-          Text(_location),
-        ],
-      ),
-    );
-
     return Semantics.fromProperties(
       properties: SemanticsProperties(
         label: 'Analog clock with time $time',
@@ -190,8 +171,18 @@ class _AnalogClockState extends State<AnalogClock> {
                         ),
                       ),
 
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          DateFormat('MMMM d, y').format(_now),
+                          style: customTheme.textTheme.body1.copyWith(
+                            fontSize: constraints.maxHeight * 0.024
+                          ),
+                        ),
+                      ),
+
                       Text(
-                        DateFormat('MMMM d, y').format(_now),
+                        _temperature,
                         style: customTheme.textTheme.body1.copyWith(
                           fontSize: constraints.maxHeight * 0.024
                         ),
@@ -266,9 +257,6 @@ class _AnalogClockState extends State<AnalogClock> {
                         ),
                       ),     
                     ),
-
-
-
                   ],
                 ),
               ),
