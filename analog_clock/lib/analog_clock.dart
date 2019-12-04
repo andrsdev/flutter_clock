@@ -147,6 +147,8 @@ class _AnalogClockState extends State<AnalogClock> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+
+              //Clock Information
               Flexible(
                   flex: 1,
                   child: Padding(
@@ -179,6 +181,9 @@ class _AnalogClockState extends State<AnalogClock> {
                       ],
                     ),
                   )),
+
+              
+              //Analog clock 
               Flexible(
                 flex: 2,
                 child: Stack(
