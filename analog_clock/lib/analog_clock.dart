@@ -3,15 +3,12 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:intl/intl.dart';
 import 'package:vector_math/vector_math_64.dart' show radians;
-
 import 'container_hand.dart';
-import 'drawn_hand.dart';
 
 /// Total distance traveled by a second or a minute hand, each second or minute,
 /// respectively.
@@ -38,8 +35,6 @@ class _AnalogClockState extends State<AnalogClock> {
 
   var _now = DateTime.now();
   var _temperature = '';
-  var _temperatureRange = '';
-  var _condition = '';
   var _location = '';
   Timer _timer;
 
@@ -71,8 +66,6 @@ class _AnalogClockState extends State<AnalogClock> {
   void _updateModel() {
     setState(() {
       _temperature = widget.model.temperatureString;
-      _temperatureRange = '(${widget.model.low} - ${widget.model.highString})';
-      _condition = widget.model.weatherString;
       _location = widget.model.location;
     });
   }
@@ -92,44 +85,59 @@ class _AnalogClockState extends State<AnalogClock> {
   @override
   Widget build(BuildContext context) {
 
+    final time = DateFormat.Hms().format(DateTime.now());
+    ThemeData customTheme = ThemeData();
+    BoxShadow hourHandBoxShadow = BoxShadow();
 
     if(Theme.of(context).brightness == Brightness.light){
       _clockFaceName = 'assets/img/light_clock_face.png';
+      customTheme = Theme.of(context).copyWith(
+        primaryColor: Color(0xFFFFFFFF), //hour hand
+        highlightColor: Color(0xFFFBFBFB), //minute hand
+        accentColor: Color(0xFFFF060A), //seconds hnd
+        backgroundColor: Color(0xFFFFFFFF),
+        textTheme: TextTheme(
+          display1: TextStyle(
+            fontFamily: 'Alata',
+            fontWeight: FontWeight.w400,
+            color: Color(0xFF505050),
+          ),
+          body1: TextStyle(
+            fontFamily: 'Alata',
+            fontWeight: FontWeight.w400,
+            color: Color(0xFF808080),
+          ),
+        )
+      );
+      hourHandBoxShadow = BoxShadow(
+        color: Colors.black.withOpacity(0.12),
+        blurRadius: 38.0,
+      );
     } else {
       _clockFaceName = 'assets/img/dark_clock_face.png';
-    }
-
-    final customTheme = Theme.of(context).brightness == Brightness.light
-        ? Theme.of(context).copyWith(
-            // Hour hand.
-            primaryColor: Color(0xFFFFFFFF),
-            // Minute hand.
-            highlightColor: Color(0xFFFBFBFB),
-            // Second hand.
-            accentColor: Color(0xFFFF060A),
-            backgroundColor: Color(0xFFFFFFFF),
-          )
-        : Theme.of(context).copyWith(
-            primaryColor: Color(0xFFFFFFFF),
-            highlightColor: Color(0xFFC0C0C0),
-            accentColor: Color(0xFFFF0202),
-            backgroundColor: Color(0xFF000000),
-          );
-
-    final time = DateFormat.Hms().format(DateTime.now());
-
-    final weatherInfo = DefaultTextStyle(
-      style: TextStyle(color: customTheme.primaryColor),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(_temperature),
-          Text(_temperatureRange),
-          Text(_condition),
-          Text(_location),
-        ],
-      ),
-    );
+      customTheme = Theme.of(context).copyWith(
+        primaryColor: Color(0xFFFFFFFF),
+        highlightColor: Color(0xFFC0C0C0),
+        accentColor: Color(0xFFFF0202),
+        backgroundColor: Color(0xFF000000),
+        textTheme: TextTheme(
+          display1: TextStyle(
+            fontFamily: 'Alata',
+            fontWeight: FontWeight.w400,
+            color: Color(0xFFE0E0E0),
+          ),
+          body1: TextStyle(
+            fontFamily: 'Alata',
+            fontWeight: FontWeight.w400,
+            color: Color(0xFF969696),
+          ),
+        )
+      );
+      hourHandBoxShadow = BoxShadow(
+        color: Colors.black.withOpacity(0.72),
+        blurRadius: 30.0,
+      );
+    } 
 
     return Semantics.fromProperties(
       properties: SemanticsProperties(
@@ -139,20 +147,54 @@ class _AnalogClockState extends State<AnalogClock> {
       child: Container(
         color: customTheme.backgroundColor,
 
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) => Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
 
-            Flexible(
-              flex: 1,
-              child: Text('mountain view')
-            ),
+              Flexible(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 64),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          _location,
+                          style: customTheme.textTheme.display1.copyWith(
+                            fontSize: constraints.maxHeight * 0.04
+                          ),
+                        ),
+                      ),
 
-            Flexible(
-              flex: 2,
-              child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) => Stack(
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          DateFormat('MMMM d, y').format(_now),
+                          style: customTheme.textTheme.body1.copyWith(
+                            fontSize: constraints.maxHeight * 0.024
+                          ),
+                        ),
+                      ),
+
+                      Text(
+                        _temperature,
+                        style: customTheme.textTheme.body1.copyWith(
+                          fontSize: constraints.maxHeight * 0.024
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ),
+
+              Flexible(
+                flex: 2,
+                child: Stack(
                   children: [
 
                     //Clock face
@@ -174,7 +216,7 @@ class _AnalogClockState extends State<AnalogClock> {
                           ),
                         ),
                       ),
-                   
+                    
                     ),
 
 
@@ -205,29 +247,21 @@ class _AnalogClockState extends State<AnalogClock> {
                       child: Transform.translate(
                         offset: Offset(0.0, - constraints.maxHeight * 0.12),
                         child: Container(
-                          width: constraints.maxHeight * 0.08,
-                          height: constraints.maxHeight * 0.3,
+                          width: constraints.maxHeight * 0.068,
+                          height: constraints.maxHeight * 0.28,
                           decoration: BoxDecoration(
                             color: customTheme.primaryColor,
                             borderRadius: BorderRadius.circular(constraints.maxHeight * 0.02),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.12),
-                                blurRadius: 38.0,
-                              )
-                            ]
+                            boxShadow: [hourHandBoxShadow]
                           ),
                         ),
                       ),     
                     ),
-
-
-
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
